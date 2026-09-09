@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1584 396" width="1584" height="396">
+  <!-- LinkedIn profile banner: 1584×396 (4:1).
+       Safe zone: profile pic sits at ~bottom-left; keep the leftmost ~320px
+       free of critical content on desktop layouts. -->
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"  stop-color="#0d0d10"/>
+      <stop offset="60%" stop-color="#0f0f12"/>
+      <stop offset="100%" stop-color="#131316"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%"  stop-color="#ff5b1f" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#ff5b1f" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1584" height="396" fill="url(#bg)"/>
+  <ellipse cx="1450" cy="200" rx="520" ry="260" fill="url(#glow)"/>
+
+  <!-- Top accent bar -->
+  <rect x="0" y="0" width="1584" height="4" fill="#ff5b1f"/>
+
+  <!-- Vertical rule between the profile-pic safe zone and content -->
+  <line x1="340" y1="70" x2="340" y2="326" stroke="#22222a" stroke-width="1"/>
+
+  <!-- Content block, starts right of the safe zone -->
+  <g transform="translate(400, 0)">
+    <!-- Small eyebrow -->
+    <text x="0" y="140" font-family="Menlo, 'Courier New', monospace" font-size="18" fill="#9a9aa2" letter-spacing="3.5">
+      SENIOR SOFTWARE ENGINEER  ·  MELBOURNE
+    </text>
+
+    <!-- Big serif headline -->
+    <text x="0" y="212" font-family="Georgia, 'Times New Roman', serif" font-size="54" font-weight="500" fill="#f4f4f0" letter-spacing="-1.4">
+      I build <tspan fill="#ff5b1f">.NET systems</tspan> and mobile apps that stay up.
+    </text>
+
+    <!-- Subline -->
+    <text x="0" y="258" font-family="Georgia, 'Times New Roman', serif" font-size="22" font-style="italic" fill="#9a9aa2" letter-spacing="-0.3">
+      Fifteen years across backend, mobile, and cloud.
+    </text>
+  </g>
+
+  <!-- Bottom-right footer: URL + tech stack -->
+  <g>
+    <line x1="400" y1="316" x2="1520" y2="316" stroke="#22222a" stroke-width="1"/>
+    <text x="400" y="354" font-family="Georgia, 'Times New Roman', serif" font-size="26" font-style="italic" fill="#f4f4f0" letter-spacing="-0.6">
+      cdan<tspan fill="#ff5b1f">.</tspan>me
+    </text>
+    <text x="1520" y="354" text-anchor="end" font-family="Menlo, 'Courier New', monospace" font-size="16" fill="#ff5b1f" letter-spacing="3">
+      .NET  ·  AZURE  ·  MAUI  ·  LINUX
+    </text>
+  </g>
+</svg>

@@ -15,12 +15,14 @@
     "rebuild": "npm run clean && npm run build",
     "fresh": "npm run clean:all && npm install && npm run build",
     "check:secrets": "./scripts/check-secrets.sh",
+    "og": "node scripts/generate-images.mjs",
     "prepare": "husky"
   },
   "dependencies": {
     "astro": "^5.0.0"
   },
   "devDependencies": {
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "sharp": "^0.33.5"
   }
 }
