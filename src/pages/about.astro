@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+---
+
+<Base title="About">
+  <article class="prose">
+    <span class="eyebrow">About</span>
+    <h1>Fifteen years. One long .NET thread.</h1>
+
+    <p class="lede muted">
+      I've been building software professionally since 2008. Started on Visual C++
+      writing IVR systems for voice-interface hardware. Ended up designing event-driven
+      microservices on Azure. In between: native Android, iOS, Xamarin, .NET MAUI,
+      Linux servers, secure messaging, PGP email, and one somewhat obsessive detour
+      into quantitative finance.
+    </p>
+
+    <p>
+      <span class="now">Currently — mobile lead on a live production platform</span>
+    </p>
+
+    <h2>What I actually do</h2>
+    <p>
+      Senior software engineer, working across the .NET stack. On any given week I'm
+      designing an event-driven service on Azure, shipping a .NET MAUI release to the
+      App Store, fixing something in the CI/CD pipeline nobody wants to touch, pairing
+      with a junior engineer on their first production incident, or writing SQL I
+      probably shouldn't be hand-writing but do anyway.
+    </p>
+    <p>
+      I've led migrations without user disruption (a live Xamarin app to .NET MAUI
+      across both platforms), stood up more than 20 microservices with zero-downtime
+      deployment, and set the mobile engineering standards for teams shipping to
+      enterprise clients — including federal government departments.
+    </p>
+
+    <h2>How I got here</h2>
+    <p>
+      Fifteen years is enough to see a few cycles come and go. I've written Visual
+      C++ on voice-interface cards, Java on hospitality PMS systems, native Android
+      back when Dalvik was the runtime, Xamarin when C# on mobile was a novelty, and
+      .NET MAUI once Microsoft rewrote the story. Somewhere along the way I picked up
+      Linux server admin (Nginx, Apache, Let's Encrypt, Fail2Ban), identity work
+      (Keycloak, .NET Identity Server, Azure AD, PGP), and integrations for most of
+      the third-parties that keep businesses running — Stripe, PayPal, Salesforce,
+      Recurly, Firebase, Google APIs, VoIP/SIP, WebRTC, XMPP.
+    </p>
+    <p>
+      I have an MSc in Cloud Computing &amp; Network Security, a Bachelor's in
+      Computing, and a small pile of certifications from an era when Sun Microsystems
+      still existed.
+    </p>
+
+    <h2>The finance side project</h2>
+    <p>
+      A few years ago I decided I wanted to understand quantitative trading from
+      first principles. So I taught myself — market structure, liquidity sweeps,
+      fair-value gaps, order-flow. Then I built a production trading-analytics
+      platform for XAU/USD, running on my own infrastructure:
+    </p>
+    <ul>
+      <li>Non-repainting scenario detection across multiple timeframes</li>
+      <li>Live candlestick charts with on-chart trade plans (entry, invalidation, targets, R:R)</li>
+      <li>60-second real-time refresh with Telegram alerts</li>
+      <li>Trading journal with MT5 / OANDA imports and weekly AI-generated performance reviews</li>
+      <li>Owned end to end — data pipeline, backend, Docker deployment, monitoring, self-hosting on a Linux VPS behind Cloudflare</li>
+    </ul>
+    <p>
+      You can <a href="https://xausd.cdan.me" target="_blank" rel="noopener">see it running →</a>
+    </p>
+    <p>
+      I mention it because it's the honest answer to <em>can you learn a new
+      domain fast</em>. Yes, when I want to.
+    </p>
+
+    <h2>Building overseas development teams</h2>
+    <p>
+      Something I keep getting asked for: helping founders and small companies stand
+      up development teams in cost-effective regions. If you've been burned by
+      outsourcing before, or you know you need to hire abroad but don't know how,
+      this is a common thing I help with. It usually looks like:
+    </p>
+    <ul>
+      <li>Sourcing and vetting engineers directly — not agencies</li>
+      <li>Structuring the team so it stays in sync with your timezone and rhythm</li>
+      <li>Setting up the tooling, process, and communication cadence that make remote teams productive instead of theatre</li>
+      <li>Being your technical lead or interim CTO while the team ramps up</li>
+    </ul>
+
+    <h2>Tech I actually reach for</h2>
+    <p>
+      A curated list, not a phone book. These are the tools I use often enough
+      to speak to them honestly.
+    </p>
+
+    <div class="stack">
+      <div class="row">
+        <span class="k">Backend</span>
+        <span class="v">C#, .NET / .NET Core, RESTful APIs (OpenAPI / Swagger), Node.js, Java, Kotlin, Swift, JavaScript</span>
+      </div>
+      <div class="row">
+        <span class="k">Cloud &amp; hosting</span>
+        <span class="v">Azure (App Service, Functions, Service Bus, Key Vault, Cosmos DB, AKS, Active Directory, Blob &amp; Table Storage), AWS (EC2, S3, SES), Cloudflare DNS, private VPS provisioning</span>
+      </div>
+      <div class="row">
+        <span class="k">DevOps</span>
+        <span class="v">Azure DevOps CI/CD, Docker, Kubernetes, Jenkins, PM2, zero-downtime deployment</span>
+      </div>
+      <div class="row">
+        <span class="k">Observability</span>
+        <span class="v">Azure Application Insights, OpenTelemetry, Grafana</span>
+      </div>
+      <div class="row">
+        <span class="k">Linux &amp; servers</span>
+        <span class="v">Nginx, Apache2, Let's Encrypt (TLS), Fail2Ban hardening</span>
+      </div>
+      <div class="row">
+        <span class="k">Data</span>
+        <span class="v">MS SQL, PostgreSQL, MySQL, MongoDB, Cosmos DB, SQLite</span>
+      </div>
+      <div class="row">
+        <span class="k">Security &amp; auth</span>
+        <span class="v">OAuth2, Keycloak, .NET Identity Server, Azure AD, PGP, end-to-end encryption</span>
+      </div>
+      <div class="row">
+        <span class="k">Mobile</span>
+        <span class="v">.NET MAUI, Xamarin, native Android, iOS</span>
+      </div>
+      <div class="row">
+        <span class="k">Integrations</span>
+        <span class="v">Stripe, PayPal, Salesforce, Recurly, Firebase, Google APIs, VoIP/SIP, WebRTC, XMPP</span>
+      </div>
+      <div class="row">
+        <span class="k">Tooling</span>
+        <span class="v">Visual Studio, Rider, VS Code, Android Studio, Xcode, IntelliJ; Git (GitHub, GitLab, Bitbucket); Appium, Mockito</span>
+      </div>
+    </div>
+
+    <h2>AI-assisted development</h2>
+    <p>
+      I use AI as a force multiplier, not a replacement for judgment. My daily
+      workflow now includes LLM tools deeply — pair-writing code, generating test
+      cases, reviewing PRs, exploring unfamiliar codebases. It's changed how fast
+      I ship without changing what <em>shipped</em> means.
+    </p>
+
+    <h2>Working with me</h2>
+    <p>
+      I take on a small number of engagements at a time. I'm equally comfortable
+      owning a project end to end or slotting into an existing team as a senior
+      engineer or tech lead. Small teams, tight loops, real users — that's the
+      sweet spot.
+    </p>
+    <p>
+      The best way to reach me is <a href={`mailto:${site.email}`}>{site.email}</a>.
+      I usually reply within a day.
+    </p>
+
+    <p class="sig">— Chathura</p>
+  </article>
+</Base>
+
+<style>
+  .prose { max-width: var(--measure); }
+  .lede {
+    font-size: 1.2rem;
+    margin: 1.5rem 0 2rem;
+  }
+  .prose h2 { margin-top: 2.5em; }
+  .prose ul { margin-bottom: 1.25rem; }
+</style>

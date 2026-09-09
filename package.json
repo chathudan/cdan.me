@@ -1,0 +1,26 @@
+{
+  "name": "cdanme",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "clean": "rm -rf dist .astro",
+    "clean:cache": "rm -rf .astro node_modules/.vite node_modules/.astro",
+    "clean:all": "rm -rf dist .astro node_modules package-lock.json",
+    "rebuild": "npm run clean && npm run build",
+    "fresh": "npm run clean:all && npm install && npm run build",
+    "check:secrets": "./scripts/check-secrets.sh",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}

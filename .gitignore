@@ -1,0 +1,46 @@
+# Build artifacts and caches
+node_modules/
+dist/
+.astro/
+*.log
+.DS_Store
+Thumbs.db
+
+# Environment / secrets — do NOT commit
+.env
+.env.*
+!.env.example
+
+# Keys and certificates
+*.pem
+*.key
+*.crt
+*.cer
+*.der
+*.p12
+*.pfx
+*.keystore
+*.jks
+id_rsa*
+id_ed25519*
+id_ecdsa*
+id_dsa*
+known_hosts
+*.gpg
+*.asc
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.iml
+.sublime-*
+*.swp
+*.swo
+
+# Claude Code — personal per-machine settings (permissions etc.)
+.claude/settings.local.json
+
+# Playwright / test output (if added later)
+test-results/
+playwright-report/
+coverage/

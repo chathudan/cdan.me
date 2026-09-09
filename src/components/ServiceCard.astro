@@ -1,0 +1,50 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  summary: string;
+  icon?: string;
+}
+const { href, title, summary, icon } = Astro.props;
+---
+
+<a href={href} class="card">
+  {icon && <div class="icon" aria-hidden="true">{icon}</div>}
+  <h3>{title}</h3>
+  <p class="muted">{summary}</p>
+  <span class="arrow" aria-hidden="true">→</span>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--fg) 2%, transparent);
+    transition: border-color .15s ease, transform .15s ease;
+    position: relative;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    color: inherit;
+  }
+  .icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+  h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+  }
+  p { margin: 0; }
+  .arrow {
+    color: var(--accent);
+    font-size: 1.25rem;
+    margin-top: 0.5rem;
+  }
+</style>

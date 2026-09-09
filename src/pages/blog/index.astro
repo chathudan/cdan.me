@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<Base title="Blog">
+  <header class="page-head">
+    <span class="eyebrow">Blog</span>
+    <h1>Notes & essays.</h1>
+    <p class="muted lede">
+      Writing about the work — building products, running small teams, and
+      making software that respects people's time.
+    </p>
+  </header>
+
+  {posts.length === 0
+    ? <p class="muted">No posts yet.</p>
+    : posts.map((p) => (
+        <PostCard
+          href={`/blog/${p.slug}/`}
+          title={p.data.title}
+          description={p.data.description}
+          date={p.data.date}
+          tags={p.data.tags}
+        />
+      ))}
+</Base>
+
+<style>
+  .page-head { max-width: 40rem; margin-bottom: 1rem; }
+  .lede { font-size: 1.15rem; margin-top: 1rem; }
+</style>

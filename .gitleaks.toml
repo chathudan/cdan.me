@@ -1,0 +1,12 @@
+# gitleaks configuration for this repo
+# Extends the default rule set — see https://github.com/gitleaks/gitleaks
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Files that legitimately contain secret-detection patterns as data"
+paths = [
+  '''scripts/check-secrets\.sh''',
+  '''\.gitleaks\.toml''',
+  '''\.gitleaksignore''',
+]

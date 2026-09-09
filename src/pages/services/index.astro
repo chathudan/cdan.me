@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+
+const services = (await getCollection('services'))
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base title="Services">
+  <header class="page-head">
+    <span class="eyebrow">Services</span>
+    <h1>What I do.</h1>
+    <p class="muted lede">
+      A short menu of engagements I take on. Every project is scoped to fit —
+      reach out and we'll figure out what makes sense.
+    </p>
+  </header>
+
+  <div class="grid">
+    {services.map((s) => (
+      <ServiceCard
+        href={`/services/${s.slug}/`}
+        title={s.data.title}
+        summary={s.data.summary}
+        icon={s.data.icon}
+      />
+    ))}
+  </div>
+</Base>
+
+<style>
+  .page-head { max-width: 40rem; margin-bottom: 2.5rem; }
+  .lede { font-size: 1.15rem; margin-top: 1rem; }
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+</style>

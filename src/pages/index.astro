@@ -1,0 +1,153 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import PostCard from '../components/PostCard.astro';
+import { site } from '../site.config';
+
+const location = 'Melbourne · Remote-friendly';
+
+const stats = [
+  { value: '15+', label: 'years shipping software' },
+  { value: '500K+', label: 'users on production platforms' },
+  { value: '20+', label: 'microservices in prod' },
+  { value: '.NET', label: 'Azure · MAUI · Linux' },
+];
+
+const featuredProject = {
+  name: 'XAU/USD Analysis Portal',
+  href: 'https://xausd.cdan.me',
+  host: 'xausd.cdan.me',
+  blurb:
+    'A production trade-planning engine I built solo — non-repainting market-structure detection, live scenario grading, journal imports, and weekly AI-generated performance reviews. Self-hosted end to end.',
+};
+
+const services = (await getCollection('services'))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const posts = (await getCollection('posts', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<Base>
+  <section class="hero">
+    <span class="now">Available for select engagements · {location}</span>
+    <h1>
+      I build <span class="accent">.NET systems</span> that stay up.
+    </h1>
+    <p class="lede muted">
+      Senior software engineer. Fifteen years across backend, mobile, and cloud —
+      event-driven microservices on Azure, .NET MAUI apps in the stores, and, when
+      curiosity gets the better of me, a production trading platform for gold.
+    </p>
+    <div class="cta">
+      <a href="/services/" class="button primary">See what I do</a>
+      <a href={`mailto:${site.email}`} class="button">Get in touch</a>
+    </div>
+
+    <div class="stats">
+      {stats.map((s) => (
+        <div class="stat">
+          <span class="value">{s.value}</span>
+          <span class="label">{s.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="featured-wrap">
+    <a href={featuredProject.href} target="_blank" rel="noopener" class="featured">
+      <span class="tag">Recent build</span>
+      <div>
+        <h3>{featuredProject.name}</h3>
+        <p class="muted">{featuredProject.blurb}</p>
+      </div>
+      <span class="go">{featuredProject.host} ↗</span>
+    </a>
+  </section>
+
+  <hr />
+
+  <section>
+    <div class="section-head">
+      <span class="eyebrow">Services</span>
+      <h2>Ways I take on work</h2>
+    </div>
+    <div class="grid">
+      {services.map((s) => (
+        <ServiceCard
+          href={`/services/${s.slug}/`}
+          title={s.data.title}
+          summary={s.data.summary}
+          icon={s.data.icon}
+        />
+      ))}
+    </div>
+  </section>
+
+  <hr />
+
+  <section>
+    <div class="section-head between">
+      <div>
+        <span class="eyebrow">Writing</span>
+        <h2>From the blog</h2>
+      </div>
+      <a href="/blog/" class="more">All posts →</a>
+    </div>
+    {posts.length === 0
+      ? <p class="muted">No posts yet — check back soon.</p>
+      : posts.map((p) => (
+          <PostCard
+            href={`/blog/${p.slug}/`}
+            title={p.data.title}
+            description={p.data.description}
+            date={p.data.date}
+            tags={p.data.tags}
+          />
+        ))}
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding: clamp(2rem, 4vw, 4rem) 0 1rem;
+  }
+  .hero h1 {
+    max-width: 20ch;
+    margin-top: 1.25rem;
+  }
+  .lede {
+    font-size: clamp(1.1rem, 1vw + 0.9rem, 1.3rem);
+    max-width: 44rem;
+    margin-top: 1.5rem;
+  }
+  .cta {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+  }
+  .featured-wrap { margin: 3rem 0 0; }
+  .section-head { margin-bottom: 1.5rem; margin-top: 1rem; }
+  .section-head.between {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .section-head h2 { margin-top: 0.25rem; }
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  }
+  .more {
+    color: var(--muted);
+    font-size: 0.95rem;
+    border-bottom: none;
+  }
+  .more:hover { color: var(--accent); }
+</style>

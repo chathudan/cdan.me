@@ -1,0 +1,85 @@
+---
+import { site } from '../site.config';
+const { pathname } = Astro.url;
+---
+
+<header class="site-header">
+  <div class="row">
+    <a href="/" class="brand" aria-label={`${site.name} — home`}>
+      <span class="mono">cdan<span class="dot">.</span>me</span>
+    </a>
+    <nav aria-label="Primary">
+      <ul>
+        {site.nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class:list={[{ active: pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/') }]}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    width: 100%;
+    padding: 1.25rem var(--pad);
+    border-bottom: 1px solid var(--line);
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+  .brand {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    border-bottom: none;
+    line-height: 1;
+  }
+  .brand .mono { display: inline-block; }
+  .brand .dot {
+    color: var(--accent);
+    display: inline-block;
+    transform: translateY(-0.05em);
+  }
+  nav ul {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  nav a {
+    border-bottom: none;
+    font-size: 0.95rem;
+    color: var(--muted);
+    position: relative;
+    padding-bottom: 4px;
+  }
+  nav a:hover { color: var(--fg); }
+  nav a.active { color: var(--fg); }
+  nav a.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  @media (max-width: 480px) {
+    nav ul { gap: 1.25rem; }
+  }
+</style>

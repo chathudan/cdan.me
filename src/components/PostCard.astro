@@ -1,0 +1,56 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  date: Date;
+  tags?: string[];
+}
+const { href, title, description, date, tags = [] } = Astro.props;
+const fmt = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+
+<article class="post">
+  <a href={href}>
+    <div class="meta">
+      <time datetime={date.toISOString()}>{fmt.format(date)}</time>
+      {tags.length > 0 && (
+        <span class="tags">{tags.map((t) => <span class="tag">#{t}</span>)}</span>
+      )}
+    </div>
+    <h3>{title}</h3>
+    <p class="muted">{description}</p>
+  </a>
+</article>
+
+<style>
+  .post {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .post a {
+    display: block;
+    border-bottom: none;
+  }
+  .post a:hover h3 { color: var(--accent); }
+  .meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+  .tags { display: inline-flex; gap: 0.5rem; }
+  .tag { color: var(--muted); }
+  h3 {
+    margin: 0 0 0.35rem;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    transition: color .15s ease;
+  }
+  p { margin: 0; }
+</style>
