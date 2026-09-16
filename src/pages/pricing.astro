@@ -1,0 +1,186 @@
+---
+import Base from '../layouts/Base.astro';
+import { packages, opsPackages, rates, type Package } from '../pricing.config';
+import { site } from '../site.config';
+import { offerCatalogSchema, breadcrumbSchema } from '../lib/schema';
+
+const money = (n: number, unit = '') => `A$${n.toLocaleString('en-AU')}${unit}`;
+
+/** Headline: the number that pulls people in. */
+function formatPrice(p: Package): string {
+  return p.priceMax ? `from ${money(p.priceMin, p.unit ?? '')}` : money(p.priceMin, p.unit ?? '');
+}
+
+/** Sub-line: the honest ceiling, so "from" never reads as a bait number. */
+function formatRange(p: Package): string | null {
+  if (!p.priceMax) return null;
+  return `Most land between ${money(p.priceMin)} and ${money(p.priceMax, p.unit ?? '')}`;
+}
+
+const schema = [
+  offerCatalogSchema(packages, opsPackages),
+  breadcrumbSchema([
+    { name: 'Home', url: `${site.url}/` },
+    { name: 'Pricing', url: `${site.url}/pricing/` },
+  ]),
+];
+---
+
+<Base
+  title="Packages & pricing"
+  description="Fixed prices for landing pages, business websites, web apps, mobile apps, and ongoing hosting — plus an hourly rate for everything else."
+  schema={schema}
+>
+  <header class="page-head">
+    <span class="eyebrow">Pricing</span>
+    <h1>Packages & pricing.</h1>
+    <p class="muted lede">
+      Starting prices, in Australian dollars, excluding GST. I'm one person, not
+      an agency — these are the projects I take on most often. Anything that
+      doesn't fit the list can be bought by the hour instead.
+    </p>
+  </header>
+
+  <div class="grid">
+    {packages.map((p) => (
+      <article class="card">
+        <h3>{p.name}</h3>
+        <p class="price">{formatPrice(p)}</p>
+        {formatRange(p) && <p class="range muted">{formatRange(p)}</p>}
+        <p class="timeline mono muted">{p.timeline} · {p.effort}</p>
+        <p class="tagline">{p.tagline}</p>
+        <ul>
+          {p.includes.map((item) => <li>{item}</li>)}
+        </ul>
+        <a class="button" href={`/contact/?package=${p.id}`}>Enquire</a>
+      </article>
+    ))}
+  </div>
+
+  <h2>Keeping it running</h2>
+  <div class="grid">
+    {opsPackages.map((p) => (
+      <article class="card">
+        <h3>{p.name}</h3>
+        <p class="price">{formatPrice(p)}</p>
+        {formatRange(p) && <p class="range muted">{formatRange(p)}</p>}
+        <p class="timeline mono muted">{p.timeline} · {p.effort}</p>
+        <p class="tagline">{p.tagline}</p>
+        <ul>
+          {p.includes.map((item) => <li>{item}</li>)}
+        </ul>
+        <a class="button" href={`/contact/?package=${p.id}`}>Enquire</a>
+      </article>
+    ))}
+  </div>
+
+  <h2>By the hour</h2>
+  <p class="muted">
+    For work that doesn't fit a fixed package — fixes, features, migrations,
+    or an ongoing arrangement without a project brief.
+  </p>
+  <div class="stack">
+    {rates.map((r) => (
+      <div class="row">
+        <span class="k">{r.label}</span>
+        <span class="v"><strong>{r.price}</strong> — {r.note}</span>
+      </div>
+    ))}
+  </div>
+  <p class="muted">
+    <a href="/services/pay-as-you-go/">Full terms for pay as you go →</a>
+  </p>
+
+  <h2>The fine print</h2>
+  <ul class="fine-print">
+    <li>All prices exclude GST.</li>
+      <li>
+        Each package covers the hours listed on its card. That is a real cap,
+        not a trick — if the work runs past it, I tell you before I keep going,
+        and the extra is billed at the hourly rate below.
+      </li>
+      <li>
+        Packages over A$9,000 can be paid in three instalments — on start, at
+        the halfway mark, and on delivery — at no extra cost.
+      </li>
+    <li>Packages over A$1,500 need a 30% deposit up front; the balance is due on delivery.</li>
+    <li>Revisions are as listed in each package, then billed hourly beyond that.</li>
+    <li>If a package is the wrong fit for what you need, I'll say so rather than sell it to you anyway.</li>
+  </ul>
+
+  <p class="closing">
+    <a class="button primary" href="/contact/">Get in touch</a>
+  </p>
+</Base>
+
+<style>
+  .page-head { max-width: 40rem; margin-bottom: 2.5rem; }
+  .lede { font-size: 1.15rem; margin-top: 1rem; }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+    margin: 1.5rem 0 2.5rem;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--fg) 2%, transparent);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .card h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+  }
+  .card .price {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    color: var(--fg);
+  }
+  .card .range {
+    font-size: 0.85rem;
+    margin: -0.35rem 0 0.1rem;
+  }
+  .card .timeline {
+    margin: 0;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+  }
+  .card .tagline {
+    margin: 0.25rem 0 0;
+  }
+  .card ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.92rem;
+    color: var(--muted);
+    flex: 1;
+  }
+  .card li { margin-bottom: 0.3rem; }
+  .card .button {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+  }
+
+  .mono { font-family: var(--font-mono); }
+
+  .fine-print {
+    max-width: var(--measure);
+    color: var(--muted);
+  }
+
+  .closing {
+    margin-top: 2.5rem;
+  }
+</style>

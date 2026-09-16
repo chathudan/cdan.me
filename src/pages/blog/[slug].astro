@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { site } from '../../site.config';
+import { blogPostingSchema, breadcrumbSchema } from '../../lib/schema';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => !data.draft);
@@ -13,9 +15,38 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 const fmt = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'long', day: 'numeric' });
+const canonical = new URL(`/blog/${entry.slug}/`, site.url).href;
+const schema = [
+  blogPostingSchema({
+    title: entry.data.title,
+    description: entry.data.description,
+    url: canonical,
+    date: entry.data.date,
+    updated: entry.data.updated,
+    image: entry.data.cover,
+    tags: entry.data.tags,
+  }),
+  breadcrumbSchema([
+    { name: 'Home', url: `${site.url}/` },
+    { name: 'Blog', url: `${site.url}/blog/` },
+    { name: entry.data.title, url: canonical },
+  ]),
+];
 ---
 
-<Base title={entry.data.title} description={entry.data.description}>
+<Base
+  title={entry.data.title}
+  description={entry.data.description}
+  ogType="article"
+  publishedTime={entry.data.date}
+  modifiedTime={entry.data.updated}
+  tags={entry.data.tags}
+  image={entry.data.cover}
+  imageAlt={entry.data.cover ? (entry.data.coverAlt ?? entry.data.title) : undefined}
+  imageWidth={entry.data.coverWidth}
+  imageHeight={entry.data.coverHeight}
+  schema={schema}
+>
   <article class="prose">
     <a href="/blog/" class="back">← All posts</a>
     <div class="meta">

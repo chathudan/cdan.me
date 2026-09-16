@@ -1,7 +1,7 @@
 ---
 title: "Starting a personal site at 15 years in."
 description: "Why I'm finally publishing under my own name, and what to expect here."
-date: 2026-09-09
+date: 2026-09-01
 tags: ["meta"]
 draft: false
 ---

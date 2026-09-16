@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { site } from '../site.config';
+import { breadcrumbSchema } from '../lib/schema';
+
+const description = 'Get in touch about a project, a package, or an hourly engagement.';
+const contactUrl = `${site.url}/contact/`;
+const schema = [
+  {
+    '@type': 'ContactPage',
+    '@id': `${contactUrl}#page`,
+    url: contactUrl,
+    name: 'Contact',
+    description,
+  },
+  breadcrumbSchema([
+    { name: 'Home', url: `${site.url}/` },
+    { name: 'Contact', url: contactUrl },
+  ]),
+];
+---
+
+<Base title="Contact" description={description} schema={schema}>
+  <header class="page-head">
+    <span class="eyebrow">Contact</span>
+    <h1>Let's talk.</h1>
+    <p class="muted lede">
+      Tell me what you're trying to build and roughly what it's worth to you.
+      I'll reply with an honest answer — including when the honest answer is
+      that you don't need me.
+    </p>
+  </header>
+
+  <ContactForm />
+
+  <p class="alt-contact muted">
+    Or just email me — <a href={`mailto:${site.email}`}>{site.email}</a>.
+    I'm Melbourne-based and reply within one business day.
+  </p>
+</Base>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const pkg = params.get('package');
+  if (pkg) {
+    const select = document.getElementById('topic') as HTMLSelectElement | null;
+    if (select) {
+      const match = Array.from(select.options).find((o) => o.value === pkg);
+      if (match) select.value = pkg;
+    }
+  }
+</script>
+
+<style>
+  .page-head { max-width: 40rem; margin-bottom: 1rem; }
+  .lede { font-size: 1.15rem; margin-top: 1rem; }
+  .alt-contact { margin-top: 2rem; font-size: 0.95rem; }
+</style>

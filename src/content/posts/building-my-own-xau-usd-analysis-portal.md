@@ -1,10 +1,12 @@
 ---
 title: "I wanted to know if my strategy was actually right. So I built the system to prove it."
 description: "How I ended up building a full XAU/USD analysis portal — .NET Core backend, deterministic structure engine, live data, and 5,787 real trades' worth of stress-testing."
-date: 2026-07-24
+date: 2026-09-10
 tags: ["trading", "engineering", "dotnet", "side-projects"]
 draft: false
 cover: "/images/blog/xausd/cover.png"
+coverWidth: 1280
+coverHeight: 719
 coverAlt: "The XAU/USD analysis portal dashboard, showing live market structure, liquidity zones, fair-value gaps, and trade-plan context."
 coverCaption: "The portal — live market structure, liquidity, FVG and trade-plan context for gold."
 ---

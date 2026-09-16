@@ -1,0 +1,214 @@
+---
+import { site } from '../site.config';
+import { allPackages } from '../pricing.config';
+
+interface Props {
+  preselect?: string;
+}
+
+const { preselect } = Astro.props;
+
+const isDisconnected = site.form.publicKey === 'REPLACE_ME_WITH_WEB3FORMS_KEY';
+
+const budgetOptions = [
+  'Not sure yet',
+  'Under A$1,000',
+  'A$1,000–5,000',
+  'A$5,000–15,000',
+  'A$15,000–35,000',
+  'A$35,000+',
+];
+---
+
+{isDisconnected && (
+  <p class="notice" role="note">
+    The form isn't wired up to send yet — until it is, email
+    {' '}<a href={`mailto:${site.email}`}>{site.email}</a> and I'll get it.
+  </p>
+)}
+
+<form
+  id="contact-form"
+  data-endpoint={site.form.endpoint}
+  data-disconnected={isDisconnected ? 'true' : 'false'}
+  data-fallback-email={site.email}
+>
+  <div class="field">
+    <label for="name">Your name <span class="req" aria-hidden="true">*</span></label>
+    <input type="text" id="name" name="name" required disabled={isDisconnected} />
+  </div>
+
+  <div class="field">
+    <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+    <input type="email" id="email" name="email" required disabled={isDisconnected} />
+  </div>
+
+  <div class="field">
+    <label for="topic">What do you need? <span class="req" aria-hidden="true">*</span></label>
+    <select id="topic" name="topic" required disabled={isDisconnected}>
+      <option value="" selected={!preselect} disabled>Choose one…</option>
+      {allPackages.map((p) => (
+        <option value={p.id} selected={preselect === p.id}>{p.name}</option>
+      ))}
+      <option value="pay-as-you-go" selected={preselect === 'pay-as-you-go'}>Pay as you go / hourly</option>
+      <option value="other" selected={preselect === 'other'}>Something else</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="budget">Rough budget (optional)</label>
+    <select id="budget" name="budget" disabled={isDisconnected}>
+      {budgetOptions.map((b) => <option value={b}>{b}</option>)}
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="message">What are you trying to build? <span class="req" aria-hidden="true">*</span></label>
+    <textarea id="message" name="message" rows="6" required disabled={isDisconnected}></textarea>
+  </div>
+
+  <input type="hidden" name="access_key" value={site.form.publicKey} />
+  <input type="hidden" name="subject" value="New enquiry from cdan.me" />
+  <input type="hidden" name="from_name" value="cdan.me" />
+  <input
+    type="checkbox"
+    name="botcheck"
+    class="hidden"
+    style="display:none"
+    tabindex="-1"
+    autocomplete="off"
+  />
+
+  <button type="submit" class="button primary" disabled={isDisconnected}>Send</button>
+
+  <p class="status" role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: var(--measure);
+    margin-top: 1.5rem;
+  }
+  .notice {
+    max-width: var(--measure);
+    padding: 0.9rem 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--accent) 8%, transparent);
+    color: var(--fg);
+    font-size: 0.95rem;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  label {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .req { color: var(--accent); }
+  input[type='text'],
+  input[type='email'],
+  select,
+  textarea {
+    font: inherit;
+    font-size: 1rem;
+    color: var(--fg);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 0.65rem 0.8rem;
+  }
+  textarea { resize: vertical; }
+  input:disabled,
+  select:disabled,
+  textarea:disabled,
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  button.primary {
+    align-self: flex-start;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+  }
+  .status {
+    margin: 0;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+  }
+  .status.error { color: var(--accent); }
+  .success {
+    max-width: var(--measure);
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--fg) 2%, transparent);
+  }
+</style>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  if (form && form.dataset.disconnected !== 'true') {
+    const endpoint = form.dataset.endpoint || 'https://api.web3forms.com/submit';
+    const statusEl = form.querySelector('.status') as HTMLParagraphElement | null;
+    const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!submitBtn || !statusEl) return;
+
+      const originalLabel = submitBtn.textContent;
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+      statusEl.textContent = '';
+      statusEl.classList.remove('error');
+
+      const formData = new FormData(form);
+      const payload: Record<string, unknown> = {};
+      formData.forEach((value, key) => {
+        payload[key] = value;
+      });
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.success !== false) {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'success';
+          wrapper.setAttribute('role', 'status');
+          wrapper.setAttribute('aria-live', 'polite');
+          wrapper.textContent = "Thanks — that's landed in my inbox. I'll reply within one business day.";
+          form.replaceWith(wrapper);
+        } else {
+          throw new Error(data.message || 'Something went wrong');
+        }
+      } catch {
+        const email = form.dataset.fallbackEmail || '';
+        statusEl.innerHTML = `Something went wrong sending that. Email me directly at <a href="mailto:${email}">${email}</a> instead.`;
+        statusEl.classList.add('error');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalLabel;
+      }
+    });
+  }
+</script>

@@ -2,19 +2,52 @@
 import { site } from '../site.config';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { websiteSchema, personSchema } from '../lib/schema';
 import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
   image?: string; // per-page override, path or absolute URL
+  imageWidth?: number;
+  imageHeight?: number;
+  imageAlt?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  tags?: string[];
+  schema?: object[];
 }
 
-const { title, description = site.description, image } = Astro.props;
+const {
+  title,
+  description = site.description,
+  image,
+  imageWidth,
+  imageHeight,
+  imageAlt = `${site.name} — ${site.tagline}`,
+  ogType = 'website',
+  noindex = false,
+  publishedTime,
+  modifiedTime,
+  tags,
+  schema,
+} = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.tagline}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL(image ?? '/og.png', site.url).href;
-const ogImageAlt = `${site.name} — ${site.tagline}`;
+const ogImageAlt = imageAlt;
+// Only /og.png's dimensions are known for certain; a caller-supplied image
+// must supply its own dimensions or we omit them (wrong dimensions are worse
+// than none — scrapers fall back to fetching the image themselves).
+const resolvedImageWidth = image ? imageWidth : 1200;
+const resolvedImageHeight = image ? imageHeight : 630;
+
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [websiteSchema(), personSchema(), ...(schema ?? [])],
+};
 ---
 
 <!doctype html>
@@ -25,31 +58,54 @@ const ogImageAlt = `${site.name} — ${site.tagline}`;
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={site.author} />
+    <meta
+      name="robots"
+      content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+    />
     <link rel="canonical" href={canonical} />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={site.locale} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    {resolvedImageWidth && <meta property="og:image:width" content={String(resolvedImageWidth)} />}
+    {resolvedImageHeight && <meta property="og:image:height" content={String(resolvedImageHeight)} />}
     <meta property="og:image:alt" content={ogImageAlt} />
+    {ogType === 'article' && publishedTime && (
+      <meta property="article:published_time" content={publishedTime.toISOString()} />
+    )}
+    {ogType === 'article' && modifiedTime && (
+      <meta property="article:modified_time" content={modifiedTime.toISOString()} />
+    )}
+    {ogType === 'article' && (
+      <meta property="article:author" content={`${site.url}/about/`} />
+    )}
+    {ogType === 'article' && tags?.map((tag) => <meta property="article:tag" content={tag} />)}
 
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={site.twitterHandle} />
+    <meta name="twitter:creator" content={site.twitterHandle} />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={ogImageAlt} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — Blog`} href={new URL('/rss.xml', site.url).href} />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#fafaf7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0e0e10" media="(prefers-color-scheme: dark)" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+    <script type="application/ld+json" set:html={JSON.stringify(graph)} />
   </head>
   <body>
     <Header />

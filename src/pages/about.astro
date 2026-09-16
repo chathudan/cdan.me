@@ -1,9 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../site.config';
+import { breadcrumbSchema } from '../lib/schema';
+
+const description =
+  'Fifteen years of .NET, mobile and cloud engineering — from Visual C++ IVR systems to event-driven microservices on Azure. Who I am and how I work.';
+const schema = [
+  breadcrumbSchema([
+    { name: 'Home', url: `${site.url}/` },
+    { name: 'About', url: `${site.url}/about/` },
+  ]),
+];
 ---
 
-<Base title="About">
+<Base title="About" description={description} schema={schema}>
   <article class="prose">
     <span class="eyebrow">About</span>
     <h1>Fifteen years. One long .NET thread.</h1>
@@ -153,7 +163,8 @@ import { site } from '../site.config';
       sweet spot.
     </p>
     <p>
-      The best way to reach me is <a href={`mailto:${site.email}`}>{site.email}</a>.
+      The best way to reach me is <a href="/contact/">the contact form</a> — or
+      email me directly at <a href={`mailto:${site.email}`}>{site.email}</a>.
       I usually reply within a day.
     </p>
 
